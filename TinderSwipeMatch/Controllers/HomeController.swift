@@ -1,5 +1,5 @@
 //
-//  HomeViewController.swift
+//  HomeController.swift
 //  TinderSwipeMatch
 //
 //  Created by Ha Na Gill on 12/20/18.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class HomeViewController: UIViewController {
+class HomeController: UIViewController {
     
     let topStackView = TopNavigationStackView()
     let cardDeckView = UIView()
@@ -16,9 +16,16 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        topStackView.profileButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
     
         setupLayout()
         setupDummyCards()
+    }
+    
+    @objc func handleSettings(){
+        let registrationController = RegistrationController()
+        present(registrationController, animated: true)
     }
     
     let cardViewModels: [CardViewModel] = {
