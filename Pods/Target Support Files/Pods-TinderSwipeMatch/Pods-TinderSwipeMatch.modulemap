@@ -1,0 +1,6 @@
+framework module Pods_TinderSwipeMatch {
+  umbrella header "Pods-TinderSwipeMatch-umbrella.h"
+
+  export *
+  module * { export * }
+}
