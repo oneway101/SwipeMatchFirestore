@@ -53,7 +53,6 @@ class RegistrationViewModel {
                     return
                 }
                 self.bindableIsRegistering.value = false
-                self.saveImageToFirebase(completion: completion)
                 
                 let imageUrl =  url?.absoluteString ?? ""
                 print("Download url of image is: ", imageUrl)

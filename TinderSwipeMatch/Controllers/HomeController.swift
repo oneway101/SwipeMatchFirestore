@@ -7,20 +7,66 @@
 //
 
 import UIKit
+import Firebase
+import JGProgressHUD
 
 class HomeController: UIViewController {
     
     let topStackView = TopNavigationStackView()
     let cardDeckView = UIView()
-    let bottomStackView = HomeBottomControlsStackView()
+    let bottomControls = HomeBottomControlsStackView()
+    
+    var cardViewModels = [CardViewModel]() // empty CardViewModel array.
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         topStackView.profileButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
+        bottomControls.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
     
         setupLayout()
-        setupDummyCards()
+        setupFirestoreUserCards()
+        fetchUsersFromFirestore()
+    }
+    
+    @objc fileprivate func handleRefresh(){
+        fetchUsersFromFirestore()
+    }
+    
+    var lastFetchedUser: User?
+    
+    fileprivate func fetchUsersFromFirestore() {
+        
+        let hud = JGProgressHUD(style: .dark)
+        hud.textLabel.text = "Fetching Users"
+        hud.show(in: view)
+        
+        let query = Firestore.firestore().collection("users").order(by: "uid").start(after: [lastFetchedUser?.uid ?? ""]).limit(to: 2)
+        
+        query.getDocuments { (snapshot, err) in
+            hud.dismiss()
+            
+            if let err = err {
+                print("Failed to fetch users:", err)
+                return
+            }
+            
+            snapshot?.documents.forEach({ (documentSnapshot) in
+                let userDictionary = documentSnapshot.data()
+                let user = User(dictionary: userDictionary)
+                self.lastFetchedUser = user
+                self.cardViewModels.append(user.toCardViewModel())
+                self.setupCardFromUser(user: user)
+            })
+        }
+    }
+    
+    fileprivate func setupCardFromUser(user: User){
+        let cardView = CardView()
+        cardView.cardViewModel = user.toCardViewModel()
+        cardDeckView.addSubview(cardView)
+        cardDeckView.sendSubviewToBack(cardView)
+        cardView.fillSuperview()
     }
     
     @objc func handleSettings(){
@@ -28,24 +74,9 @@ class HomeController: UIViewController {
         present(registrationController, animated: true)
     }
     
-    let cardViewModels: [CardViewModel] = {
-        
-        let cards = [
-            Card(name: "Greek Salad", calorie: 350, imageNames: ["greek-salad"]),
-            Card(name: "Apple Pie", calorie: 150, imageNames: ["apple-pie"]),
-            Advertiser(title: "Penthouse 808", brandName: "Crowning The Ravel Hotel is Penthouse 808, a 9,500 square-foot indoor/outdoor rooftop restaurant, lounge and events space that offers breathtaking views of the Manhattan skyline and Queensboro bridge.", imageNames: ["penthouse808"]),
-            Advertiser(title: "Gallow Green", brandName: "The verdant, vintage train station-inspired rooftop bar at the McKittrick Hotel. affords a regal view of gleaming West Side buildings and the cloud-streaked horizon.", imageNames: ["gallow-green"]),
-            Card(name: "Chocolate Cake", calorie: 352, imageNames: ["choco-cake-1","choco-cake-2","choco-cake-3"])
-            ] as [CardViewModelDelegate]
-        
-        let viewModels = cards.map({return $0.toCardViewModel()})
-        return viewModels
-    }()
-        
-    
     // MARK: - Fileprivate
     
-    fileprivate func setupDummyCards(){
+    fileprivate func setupFirestoreUserCards(){
         cardViewModels.forEach { (cardVM) in
             
             let cardView = CardView()
@@ -56,7 +87,9 @@ class HomeController: UIViewController {
     }
     
     fileprivate func setupLayout() {
-        let overallStackView = UIStackView(arrangedSubviews: [topStackView, cardDeckView, bottomStackView])
+        view.backgroundColor = .white
+        
+        let overallStackView = UIStackView(arrangedSubviews: [topStackView, cardDeckView, bottomControls])
         
         // Set the stackview properties
         overallStackView.axis = .vertical

@@ -29,14 +29,13 @@ class CardViewModel {
         didSet{
             print("imageIndex: \(imageIndex)")
             // Set the image
-            let imageName = imageNames[imageIndex]
-            let image = UIImage(named: imageName)
-            imageIndexObserver?(imageIndex, image)
+            let imageUrl = imageNames[imageIndex]
+            imageIndexObserver?(imageIndex, imageUrl)
         }
     }
     
     // Reactive Programming
-    var imageIndexObserver: ((Int, UIImage?)-> Void)?
+    var imageIndexObserver: ((Int, String?)-> Void)?
     
     // Pervent out of the index range using min and max
     func advanceToNextPhoto(){

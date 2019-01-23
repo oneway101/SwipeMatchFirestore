@@ -7,16 +7,18 @@
 //
 
 import UIKit
+import SDWebImage
 
 class CardView: UIView {
     
     var cardViewModel: CardViewModel! {
         didSet {
-            
             // Set default image
             // accessing index 0 will crash if imageNames.count == 0
-            let imageName = cardViewModel.imageNames.first ?? ""
-            imageView.image = UIImage(named: imageName)
+            let urlString = cardViewModel.imageNames.first ?? ""
+            if let url = URL(string: urlString) {
+                imageView.sd_setImage(with: url)
+            }
             
             // Create bars
             if cardViewModel.imageNames.count != 1 {
@@ -36,9 +38,11 @@ class CardView: UIView {
     }
     
     fileprivate func setupImageIndexObserver(){
-        cardViewModel.imageIndexObserver = { [weak self] (index, image) in
+        cardViewModel.imageIndexObserver = { [weak self] (index, imageUrl) in
             print("Getting index number and image from view model")
-            self?.imageView.image = image
+            if let url = URL(string: imageUrl ?? "") {
+                self?.imageView.sd_setImage(with: url)
+            }
             
             if let count = self?.cardViewModel.imageNames.count, count > 1 {
                 // Set all bars to default color

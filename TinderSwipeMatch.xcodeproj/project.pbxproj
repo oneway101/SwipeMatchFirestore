@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		04AA377F6735D450E715307A /* Pods_TinderSwipeMatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 561CCD608A838B1261D14766 /* Pods_TinderSwipeMatch.framework */; };
-		8425AD2E21D6DE2200884036 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8425AD2D21D6DE2200884036 /* Card.swift */; };
+		8425AD2E21D6DE2200884036 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8425AD2D21D6DE2200884036 /* User.swift */; };
 		8425AD3421DD447700884036 /* CardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8425AD3321DD447700884036 /* CardViewModel.swift */; };
 		8425AD3621DD91F600884036 /* Advertiser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8425AD3521DD91F600884036 /* Advertiser.swift */; };
 		8430699121D456A50027C717 /* HomeBottomControlsStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8430699021D456A40027C717 /* HomeBottomControlsStackView.swift */; };
@@ -30,7 +30,7 @@
 /* Begin PBXFileReference section */
 		561CCD608A838B1261D14766 /* Pods_TinderSwipeMatch.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinderSwipeMatch.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		61A69448DD6CBB7EF299416D /* Pods-TinderSwipeMatch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinderSwipeMatch.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TinderSwipeMatch/Pods-TinderSwipeMatch.debug.xcconfig"; sourceTree = "<group>"; };
-		8425AD2D21D6DE2200884036 /* Card.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
+		8425AD2D21D6DE2200884036 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8425AD3321DD447700884036 /* CardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViewModel.swift; sourceTree = "<group>"; };
 		8425AD3521DD91F600884036 /* Advertiser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Advertiser.swift; sourceTree = "<group>"; };
 		8430699021D456A40027C717 /* HomeBottomControlsStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeBottomControlsStackView.swift; sourceTree = "<group>"; };
@@ -76,7 +76,7 @@
 		8425AD2C21D6DE0E00884036 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				8425AD2D21D6DE2200884036 /* Card.swift */,
+				8425AD2D21D6DE2200884036 /* User.swift */,
 				8425AD3521DD91F600884036 /* Advertiser.swift */,
 			);
 			path = Model;
@@ -313,7 +313,7 @@
 				8430699721D56D4B0027C717 /* CardView.swift in Sources */,
 				8430699521D4655C0027C717 /* TopNavigationStackView.swift in Sources */,
 				8430DD7221E020DA00F29BB0 /* RegistrationController.swift in Sources */,
-				8425AD2E21D6DE2200884036 /* Card.swift in Sources */,
+				8425AD2E21D6DE2200884036 /* User.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
