@@ -19,6 +19,8 @@
 		8430DD7621E51BCD00F29BB0 /* RegistrationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8430DD7521E51BCD00F29BB0 /* RegistrationViewModel.swift */; };
 		8430DD7821E588F200F29BB0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8430DD7721E588F200F29BB0 /* GoogleService-Info.plist */; };
 		8430DD7A21E6E6A100F29BB0 /* Bindable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8430DD7921E6E6A100F29BB0 /* Bindable.swift */; };
+		843545BD21F90C13003F1049 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843545BC21F90C13003F1049 /* SettingsController.swift */; };
+		843545BF21F9598F003F1049 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 843545BE21F9598F003F1049 /* SettingsCell.swift */; };
 		8499D6A721CC1C6E007A3910 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499D6A621CC1C6E007A3910 /* AppDelegate.swift */; };
 		8499D6A921CC1C6E007A3910 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8499D6A821CC1C6E007A3910 /* HomeController.swift */; };
 		8499D6AC21CC1C6E007A3910 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8499D6AA21CC1C6E007A3910 /* Main.storyboard */; };
@@ -41,6 +43,8 @@
 		8430DD7521E51BCD00F29BB0 /* RegistrationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewModel.swift; sourceTree = "<group>"; };
 		8430DD7721E588F200F29BB0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8430DD7921E6E6A100F29BB0 /* Bindable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bindable.swift; sourceTree = "<group>"; };
+		843545BC21F90C13003F1049 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
+		843545BE21F9598F003F1049 /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		8499D6A321CC1C6E007A3910 /* TinderSwipeMatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinderSwipeMatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8499D6A621CC1C6E007A3910 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8499D6A821CC1C6E007A3910 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
@@ -88,6 +92,7 @@
 				8499D6A821CC1C6E007A3910 /* HomeController.swift */,
 				8430DD7121E020DA00F29BB0 /* RegistrationController.swift */,
 				8430DD7921E6E6A100F29BB0 /* Bindable.swift */,
+				843545BC21F90C13003F1049 /* SettingsController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -108,6 +113,7 @@
 				8430699421D4655C0027C717 /* TopNavigationStackView.swift */,
 				8430699621D56D4B0027C717 /* CardView.swift */,
 				8430DD7321E0306600F29BB0 /* CustomTextField.swift */,
+				843545BE21F9598F003F1049 /* SettingsCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -311,9 +317,11 @@
 				8499D6B921CD7CCB007A3910 /* Extensions+UIView.swift in Sources */,
 				8425AD3421DD447700884036 /* CardViewModel.swift in Sources */,
 				8430699721D56D4B0027C717 /* CardView.swift in Sources */,
+				843545BD21F90C13003F1049 /* SettingsController.swift in Sources */,
 				8430699521D4655C0027C717 /* TopNavigationStackView.swift in Sources */,
 				8430DD7221E020DA00F29BB0 /* RegistrationController.swift in Sources */,
 				8425AD2E21D6DE2200884036 /* User.swift in Sources */,
+				843545BF21F9598F003F1049 /* SettingsCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
