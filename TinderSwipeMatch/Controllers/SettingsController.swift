@@ -56,6 +56,33 @@ class SettingsController: UITableViewController, UIImagePickerControllerDelegate
         tableView.backgroundColor = UIColor(white: 0.95, alpha: 1)
         tableView.tableFooterView = UIView() // removes default seperater lines
         tableView.keyboardDismissMode = .interactive
+        fetchCurrentUser()
+    }
+    
+    var user: User?
+    
+    fileprivate func fetchCurrentUser(){
+        print("current user uid", Auth.auth().currentUser?.uid)
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        Firestore.firestore().collection("users").document(uid).getDocument { (snapshot, err) in
+            if let err = err {
+                print(err)
+                return
+            }
+            guard let dictionary = snapshot?.data() else { return }
+            self.user = User(dictionary: dictionary)
+            print(dictionary)
+            self.loadUserPhotos()
+            self.tableView.reloadData()
+        }
+
+    }
+    
+    fileprivate func loadUserPhotos(){
+        guard let imageUrl = user?.imageUrl1, let url = URL(string: imageUrl) else { return }
+        SDWebImageManager.shared().loadImage(with: url, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, data, err, _, _, _) in
+            self.image1Button.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
+        }
     }
     
     lazy var header: UIView = {
@@ -118,10 +145,15 @@ class SettingsController: UITableViewController, UIImagePickerControllerDelegate
         switch indexPath.section {
         case 1:
             cell.textfield.placeholder = "Enter Name"
+            cell.textfield.text = user?.name
         case 2:
             cell.textfield.placeholder = "Enter Profession"
+            cell.textfield.text = user?.profession
         case 3:
             cell.textfield.placeholder = "Enter Age"
+            if let age = user?.age {
+                cell.textfield.text = String(age)
+            }
         default:
             cell.textfield.placeholder = "Enter Bio"
         }
