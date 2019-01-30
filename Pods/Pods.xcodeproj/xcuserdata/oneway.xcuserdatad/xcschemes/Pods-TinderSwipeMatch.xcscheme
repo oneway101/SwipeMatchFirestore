@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D5FE9CD5D94EA2F11A6CB5B928197F1A"
+               BlueprintIdentifier = "7D174F47564762E7F82C614C24C5D5A4"
                BuildableName = "Pods_TinderSwipeMatch.framework"
                BlueprintName = "Pods-TinderSwipeMatch"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D5FE9CD5D94EA2F11A6CB5B928197F1A"
+            BlueprintIdentifier = "7D174F47564762E7F82C614C24C5D5A4"
             BuildableName = "Pods_TinderSwipeMatch.framework"
             BlueprintName = "Pods-TinderSwipeMatch"
             ReferencedContainer = "container:Pods.xcodeproj">

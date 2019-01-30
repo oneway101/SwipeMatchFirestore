@@ -6,12 +6,12 @@ target 'TinderSwipeMatch' do
   use_frameworks!
 
   # Pods for TinderSwipeMatch
-  pod 'Firebase/Firestore’,’~>5.10.0’
-  pod 'Firebase/Auth’,’~>5.10.0’
-  pod 'Firebase/Storage’,’~>5.10.0’
-  pod 'Firebase/Core’
-  pod 'GoogleAppMeasurement','~> 5.2.0'
-  pod 'SDWebImage','~>4.4.2’
-  pod 'JGProgressHUD','~>2.0.3'
+  pod 'Firebase/Firestore','~> 5.15.0'
+  pod 'Firebase/Auth','~> 5.15.0'
+  pod 'Firebase/Storage','~> 5.15.0'
+  pod 'Firebase/Core'
+  pod 'GoogleAppMeasurement', '~> 5.4.0'
+  pod 'SDWebImage', '~>4.4.2’
+  pod 'JGProgressHUD', '~>2.0.3'
 
 end
