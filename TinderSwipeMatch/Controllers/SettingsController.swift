@@ -165,8 +165,10 @@ class SettingsController: UITableViewController, UIImagePickerControllerDelegate
             label.text = "Profession"
         case 3:
             label.text = "Age"
-        default:
+        case 4:
             label.text = "Bio"
+        default:
+            label.text = "Seeking Age Range"
             
         }
         return label
@@ -177,31 +179,72 @@ class SettingsController: UITableViewController, UIImagePickerControllerDelegate
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 5
+        return 6
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return section == 0 ? 0 : 1
     }
     
+    @objc fileprivate func handleMinAgeChange(slider: UISlider){
+        let indexPath = IndexPath(row: 0, section: 5)
+        let ageRangeCell = tableView.cellForRow(at: indexPath) as! AgeRangeCell
+        ageRangeCell.minLabel.text = "Min \(Int(slider.value))"
+        user?.minSeekingAge = Int(slider.value)
+    }
+    
+    @objc fileprivate func handleMaxAgeChange(slider: UISlider){
+        let indexPath = IndexPath(row: 0, section: 5)
+        let ageRangeCell = tableView.cellForRow(at: indexPath) as! AgeRangeCell
+        ageRangeCell.maxLabel.text = "Max \(Int(slider.value))"
+        user?.maxSeekingAge = Int(slider.value)
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if indexPath.section == 5 {
+            let ageRangeCell = AgeRangeCell(style: .default, reuseIdentifier: nil)
+            ageRangeCell.minSlider.addTarget(self, action: #selector(handleMinAgeChange), for: .valueChanged)
+            ageRangeCell.maxSlider.addTarget(self, action: #selector(handleMaxAgeChange), for: .valueChanged)
+            ageRangeCell.minLabel.text = "Min \(user?.minSeekingAge ?? -1)"
+            ageRangeCell.maxLabel.text = "Max \(user?.maxSeekingAge ?? -1)"
+            return ageRangeCell
+        }
+        
         let cell = SettingsCell(style: .default, reuseIdentifier: nil)
+
         switch indexPath.section {
         case 1:
             cell.textfield.placeholder = "Enter Name"
             cell.textfield.text = user?.name
+            cell.textfield.addTarget(self, action: #selector(handleNameChange), for: .editingChanged)
         case 2:
             cell.textfield.placeholder = "Enter Profession"
             cell.textfield.text = user?.profession
+            cell.textfield.addTarget(self, action: #selector(handleProfessionChange), for: .editingChanged)
         case 3:
             cell.textfield.placeholder = "Enter Age"
+            cell.textfield.addTarget(self, action: #selector(handleAgeChange), for: .editingChanged)
             if let age = user?.age {
                 cell.textfield.text = String(age)
             }
         default:
             cell.textfield.placeholder = "Enter Bio"
         }
+        
         return cell
+    }
+    
+    @objc fileprivate func handleNameChange(textfield: UITextField){
+        user?.name = textfield.text
+    }
+    
+    @objc fileprivate func handleProfessionChange(textfield: UITextField){
+        user?.profession = textfield.text
+    }
+    
+    @objc fileprivate func handleAgeChange(textfield: UITextField){
+        user?.age = Int(textfield.text ?? "")
     }
     
     fileprivate func setupNavigationItems() {
@@ -223,7 +266,9 @@ class SettingsController: UITableViewController, UIImagePickerControllerDelegate
             "age": user?.age ?? -1,
             "imageUrl1": user?.imageUrl1 ?? "",
             "imageUrl2": user?.imageUrl2 ?? "",
-            "imageUrl3": user?.imageUrl3 ?? ""
+            "imageUrl3": user?.imageUrl3 ?? "",
+            "minSeekingAge": user?.minSeekingAge ?? -1,
+            "maxSeekingAge": user?.maxSeekingAge ?? -1
         ]
         Firestore.firestore().collection("users").document(uid).setData(docData) { (err) in
             if let err = err {

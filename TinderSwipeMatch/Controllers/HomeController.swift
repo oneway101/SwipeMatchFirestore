@@ -22,11 +22,17 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         
         topStackView.profileButton.addTarget(self, action: #selector(handleSettings), for: .touchUpInside)
+        topStackView.chatButton.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
         bottomControls.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
     
         setupLayout()
         setupFirestoreUserCards()
         fetchUsersFromFirestore()
+    }
+    
+    @objc fileprivate func handleRegister(){
+        let registrationController = RegistrationController()
+        present(registrationController, animated: true)
     }
     
     @objc fileprivate func handleRefresh(){
