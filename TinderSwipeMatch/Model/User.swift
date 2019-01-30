@@ -9,18 +9,23 @@
 import UIKit
 
 struct User: CardViewModelDelegate {
-    let name: String?
-    let age: Int?
-    let profession: String?
-    let imageUrl1: String?
-    let uid: String?
+    var name: String?
+    var age: Int?
+    var profession: String?
+    var imageUrl1: String?
+    var imageUrl2: String?
+    var imageUrl3: String?
+    var uid: String?
     
     init(dictionary:[String:Any]){
+        self.uid = dictionary["uid"] as? String
         self.name = dictionary["fullName"] as? String
         self.age = dictionary["age"] as? Int
         self.profession = dictionary["profession"] as? String
         self.imageUrl1 = dictionary["imageUrl1"] as? String
-        self.uid = dictionary["uid"] as? String
+        self.imageUrl2 = dictionary["imageUrl2"] as? String
+        self.imageUrl3 = dictionary["imageUrl3"] as? String
+        
     }
     
     func toCardViewModel() -> CardViewModel {
@@ -37,8 +42,14 @@ struct User: CardViewModelDelegate {
         attributedText.append(NSAttributedString(
             string: "\n\(profession ?? "")",
             attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 20, weight: .bold)]))
-        return CardViewModel(imageNames: [imageUrl1 ?? ""], attributedText: attributedText, textAlignment: .left)
-
+        
+        var imageUrls = [String]() // empty string array
+        // Append image urls if it is not nil
+        if let url = imageUrl1 { imageUrls.append(url) }
+        if let url = imageUrl2 { imageUrls.append(url) }
+        if let url = imageUrl3 { imageUrls.append(url) }
+        
+        return CardViewModel(imageNames: imageUrls, attributedText: attributedText, textAlignment: .left)
+        
     }
 }
-

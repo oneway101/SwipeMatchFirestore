@@ -47,6 +47,42 @@ class SettingsController: UITableViewController, UIImagePickerControllerDelegate
         let imageButton = (picker as? CustomImagePickerController)?.imageButton
         imageButton?.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
         dismiss(animated: true, completion: nil)
+        
+        let filename = UUID().uuidString
+        let ref = Storage.storage().reference(withPath: "/images/\(filename)")
+        guard let imageData = image?.jpegData(compressionQuality: 0.75) else { return }
+        
+        let hud = JGProgressHUD(style: .dark)
+        hud.textLabel.text = "Uploading image..."
+        hud.show(in: view)
+        
+        ref.putData(imageData, metadata: nil, completion: { (_, err) in
+            hud.dismiss()
+            if let err = err {
+                print("Failed to upload image to storeage: ", err)
+                return
+            }
+            print("Finished uploading image to storage")
+            ref.downloadURL(completion: { (url, err) in
+                hud.dismiss()
+                if let err = err {
+                    print("Failed to get download URL: ", err)
+                    return
+                }
+                
+                let imageUrl =  url?.absoluteString ?? ""
+                print("Download url of image is: ", imageUrl)
+                
+                if imageButton == self.image1Button {
+                    self.user?.imageUrl1 = imageUrl
+                } else if imageButton == self.image2Button {
+                    self.user?.imageUrl2 = imageUrl
+                } else {
+                    self.user?.imageUrl3 = imageUrl
+                }
+            })
+            
+        })
     }
     
     override func viewDidLoad() {
@@ -79,9 +115,17 @@ class SettingsController: UITableViewController, UIImagePickerControllerDelegate
     }
     
     fileprivate func loadUserPhotos(){
-        guard let imageUrl = user?.imageUrl1, let url = URL(string: imageUrl) else { return }
-        SDWebImageManager.shared().loadImage(with: url, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, data, err, _, _, _) in
+        guard let imageUrl1 = user?.imageUrl1, let url1 = URL(string: imageUrl1) else { return }
+        SDWebImageManager.shared().loadImage(with: url1, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, data, err, _, _, _) in
             self.image1Button.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
+        }
+        guard let imageUrl2 = user?.imageUrl2, let url2 = URL(string: imageUrl2) else { return }
+        SDWebImageManager.shared().loadImage(with: url2, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, data, err, _, _, _) in
+            self.image2Button.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
+        }
+        guard let imageUrl3 = user?.imageUrl3, let url3 = URL(string: imageUrl3) else { return }
+        SDWebImageManager.shared().loadImage(with: url3, options: SDWebImageOptions.continueInBackground, progress: nil) { (image, data, err, _, _, _) in
+            self.image3Button.setImage(image?.withRenderingMode(.alwaysOriginal), for: .normal)
         }
     }
     
@@ -165,9 +209,29 @@ class SettingsController: UITableViewController, UIImagePickerControllerDelegate
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleCancel)),
+            UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(handleSave)),
             UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleCancel))
         ]
+    }
+    
+    @objc fileprivate func handleSave(){
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let docData: [String:Any] = [
+            "uid": uid,
+            "fullName": user?.name ?? "",
+            "profession": user?.profession ?? "",
+            "age": user?.age ?? -1,
+            "imageUrl1": user?.imageUrl1 ?? "",
+            "imageUrl2": user?.imageUrl2 ?? "",
+            "imageUrl3": user?.imageUrl3 ?? ""
+        ]
+        Firestore.firestore().collection("users").document(uid).setData(docData) { (err) in
+            if let err = err {
+                print("Failed to save user settings: ", err)
+                return
+            }
+            print("Finished saving user info")
+        }
     }
     
     @objc fileprivate func handleCancel(){
