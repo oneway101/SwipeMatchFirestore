@@ -10,7 +10,7 @@ import UIKit
 import Firebase
 import JGProgressHUD
 
-class HomeController: UIViewController {
+class HomeController: UIViewController, SettingsControllerDelegate {
     
     let topStackView = TopNavigationStackView()
     let cardDeckView = UIView()
@@ -26,8 +26,7 @@ class HomeController: UIViewController {
         bottomControls.refreshButton.addTarget(self, action: #selector(handleRefresh), for: .touchUpInside)
     
         setupLayout()
-        setupFirestoreUserCards()
-        fetchUsersFromFirestore()
+        fetchCurrentUser()
     }
     
     @objc fileprivate func handleRegister(){
@@ -39,15 +38,32 @@ class HomeController: UIViewController {
         fetchUsersFromFirestore()
     }
     
-    var lastFetchedUser: User?
+    var user: User?
+    
+    fileprivate func fetchCurrentUser(){
+        print("current user uid", Auth.auth().currentUser?.uid)
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        Firestore.firestore().collection("users").document(uid).getDocument { (snapshot, err) in
+            if let err = err {
+                print(err)
+                return
+            }
+            guard let dictionary = snapshot?.data() else { return }
+            self.user = User(dictionary: dictionary)
+            print(dictionary)
+            self.fetchUsersFromFirestore()
+        }
+    }
     
     fileprivate func fetchUsersFromFirestore() {
+        
+        guard let minAge = user?.minSeekingAge, let maxAge = user?.maxSeekingAge else { return }
         
         let hud = JGProgressHUD(style: .dark)
         hud.textLabel.text = "Fetching Users"
         hud.show(in: view)
         
-        let query = Firestore.firestore().collection("users").order(by: "uid").start(after: [lastFetchedUser?.uid ?? ""]).limit(to: 2)
+        let query = Firestore.firestore().collection("users").whereField("age", isGreaterThan: minAge).whereField("age", isLessThan: maxAge)
         
         query.getDocuments { (snapshot, err) in
             hud.dismiss()
@@ -60,7 +76,7 @@ class HomeController: UIViewController {
             snapshot?.documents.forEach({ (documentSnapshot) in
                 let userDictionary = documentSnapshot.data()
                 let user = User(dictionary: userDictionary)
-                self.lastFetchedUser = user
+                self.user = user
                 self.cardViewModels.append(user.toCardViewModel())
                 self.setupCardFromUser(user: user)
             })
@@ -77,21 +93,16 @@ class HomeController: UIViewController {
     
     @objc func handleSettings(){
         let settingsController = SettingsController()
+        settingsController.delegate = self
         let navController = UINavigationController(rootViewController: settingsController)
         present(navController, animated: true)
     }
     
-    // MARK: - Fileprivate
-    
-    fileprivate func setupFirestoreUserCards(){
-        cardViewModels.forEach { (cardVM) in
-            
-            let cardView = CardView()
-            cardView.cardViewModel = cardVM
-            cardDeckView.addSubview(cardView)
-            cardView.fillSuperview()
-        }
+    func didSaveSettings() {
+        fetchCurrentUser()
     }
+    
+    // MARK: - Fileprivate
     
     fileprivate func setupLayout() {
         view.backgroundColor = .white
